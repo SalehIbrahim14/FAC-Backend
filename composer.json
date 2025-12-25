@@ -1,0 +1,15 @@
+{
+    "name": "saleh-ibrahim/fac-backend",
+    "description": "FAC Backend Email Service",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "phpmailer/phpmailer": "^6.8",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "FACBackend\\": "src/"
+        }
+    }
+}
