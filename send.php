@@ -79,31 +79,7 @@ try {
     // Validate required fields
     $requiredFields = ['name', 'email', 'message', 'phone', 'service', 'companyName'];
     $missingFields = [];
-    
-    foreach ($requiredFields as $field) {
-        if (empty($data[$field])) {
-            $missingFields[] = $field;
-        }
-    }
-    
-    if (!empty($missingFields)) {
-        $lang = getLang($data);
-        $message = getLocalizedMessage(
-            $lang,
-            'Missing required fields: ' . implode(', ', $missingFields),
-            'حقول مطلوبة مفقودة: ' . implode(', ', $missingFields)
-        );
-            
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'message' => $message,
-            'messageAr' => 'حقول مطلوبة مفقودة: ' . implode(', ', $missingFields),
-            'missing_fields' => $missingFields
-        ]);
-        exit();
-    }
-    
+        
     // Validate email format
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
         $lang = getLang($data);
@@ -151,12 +127,12 @@ try {
     
     // Server settings
     $mail->isSMTP();
-    $mail->Host       = $_ENV['MAILGUN_SMTP_HOST'];
+    $mail->Host       = $_ENV['MAILGUN_HOST'];
     $mail->SMTPAuth   = true;
-    $mail->Username   = $_ENV['MAILGUN_SMTP_USER'];
-    $mail->Password   = $_ENV['MAILGUN_SMTP_PASSWORD'];
+    $mail->Username   = $_ENV['MAILGUN_USER'];
+    $mail->Password   = $_ENV['MAILGUN_PASS'];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = $_ENV['MAILGUN_SMTP_PORT'];
+    $mail->Port       = $_ENV['MAILGUN_PORT'];
     $mail->CharSet    = 'UTF-8';
     
     // Set timeout
