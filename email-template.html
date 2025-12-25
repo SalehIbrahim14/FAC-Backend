@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رسالة جديدة من العميل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .email-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .email-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .email-body {
+            padding: 30px;
+        }
+        
+        .info-row {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.6;
+            word-wrap: break-word;
+        }
+        
+        .message-box {
+            background-color: #f9f9f9;
+            border-right: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .email-footer {
+            background-color: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+            color: #666666;
+            font-size: 12px;
+        }
+        
+        .email-footer p {
+            margin: 5px 0;
+        }
+        
+        @media only screen and (max-width: 600px) {
+            .email-body {
+                padding: 20px;
+            }
+            
+            .email-header {
+                padding: 20px;
+            }
+            
+            .email-header h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>📧 رسالة جديدة من العميل</h1>
+            <p>لقد وصلتك رسالة جديدة من خلال نموذج الاتصال</p>
+        </div>
+        
+        <div class="email-body">
+            <div class="info-row">
+                <div class="info-label">👤 الاسم:</div>
+                <div class="info-value">{{name}}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">📧 البريد الإلكتروني:</div>
+                <div class="info-value">{{email}}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">📱 رقم الهاتف:</div>
+                <div class="info-value">{{phone}}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">🏢 اسم الشركة:</div>
+                <div class="info-value">{{companyName}}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">🛠️ الخدمة المطلوبة:</div>
+                <div class="info-value">{{service}}</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">💬 الرسالة:</div>
+                <div class="message-box info-value">{{message}}</div>
+            </div>
+        </div>
+        
+        <div class="email-footer">
+            <p>هذه الرسالة تم إرسالها من نموذج الاتصال على موقع First Answer Company</p>
+            <p>© 2024 First Answer Company. جميع الحقوق محفوظة.</p>
+        </div>
+    </div>
+</body>
+</html>

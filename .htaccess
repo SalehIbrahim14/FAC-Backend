@@ -1,0 +1,50 @@
+# Enable rewrite engine
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirect to HTTPS (uncomment in production)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Set base directory
+    RewriteBase /
+    
+    # Protect .env file
+    <Files .env>
+        Order allow,deny
+        Deny from all
+    </Files>
+    
+    # Protect composer files
+    <FilesMatch "^composer\.(json|lock)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+    
+    # Allow CORS preflight requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L]
+</IfModule>
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Enable PHP error logging
+php_flag display_errors Off
+php_flag log_errors On
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes
+
+# Protect vendor directory
+<IfModule mod_alias.c>
+    RedirectMatch 403 ^/vendor/.*$
+</IfModule>
