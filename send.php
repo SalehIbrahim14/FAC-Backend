@@ -41,6 +41,28 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 
+/**
+ * Helper function to get language from data array
+ * 
+ * @param array|null $data The data array
+ * @return string The language code ('ar' or 'en')
+ */
+function getLang($data) {
+    return (isset($data['lang']) && $data['lang'] === 'en') ? 'en' : 'ar';
+}
+
+/**
+ * Helper function to get localized message
+ * 
+ * @param string $lang Language code
+ * @param string $messageEn English message
+ * @param string $messageAr Arabic message
+ * @return string The localized message
+ */
+function getLocalizedMessage($lang, $messageEn, $messageAr) {
+    return $lang === 'en' ? $messageEn : $messageAr;
+}
+
 try {
     // Load environment variables
     $dotenv = Dotenv::createImmutable(__DIR__);
@@ -65,10 +87,12 @@ try {
     }
     
     if (!empty($missingFields)) {
-        $lang = isset($data['lang']) ? $data['lang'] : 'ar';
-        $message = $lang === 'en' 
-            ? 'Missing required fields: ' . implode(', ', $missingFields)
-            : 'حقول مطلوبة مفقودة: ' . implode(', ', $missingFields);
+        $lang = getLang($data);
+        $message = getLocalizedMessage(
+            $lang,
+            'Missing required fields: ' . implode(', ', $missingFields),
+            'حقول مطلوبة مفقودة: ' . implode(', ', $missingFields)
+        );
             
         http_response_code(400);
         echo json_encode([
@@ -82,10 +106,12 @@ try {
     
     // Validate email format
     if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-        $lang = isset($data['lang']) ? $data['lang'] : 'ar';
-        $message = $lang === 'en' 
-            ? 'Invalid email address'
-            : 'عنوان البريد الإلكتروني غير صالح';
+        $lang = getLang($data);
+        $message = getLocalizedMessage(
+            $lang,
+            'Invalid email address',
+            'عنوان البريد الإلكتروني غير صالح'
+        );
             
         http_response_code(400);
         echo json_encode([
@@ -103,7 +129,7 @@ try {
     $service = htmlspecialchars($data['service'], ENT_QUOTES, 'UTF-8');
     $companyName = htmlspecialchars($data['companyName'], ENT_QUOTES, 'UTF-8');
     $message = htmlspecialchars($data['message'], ENT_QUOTES, 'UTF-8');
-    $lang = isset($data['lang']) ? $data['lang'] : 'ar';
+    $lang = getLang($data);
     
     // Load email template
     $templatePath = __DIR__ . '/email-template.html';
@@ -174,9 +200,11 @@ try {
     http_response_code(200);
     echo json_encode([
         'success' => true,
-        'message' => $lang === 'en' 
-            ? 'Email sent successfully! We will contact you soon.'
-            : 'تم إرسال البريد الإلكتروني بنجاح! سنتواصل معك قريباً.',
+        'message' => getLocalizedMessage(
+            $lang,
+            'Email sent successfully! We will contact you soon.',
+            'تم إرسال البريد الإلكتروني بنجاح! سنتواصل معك قريباً.'
+        ),
         'messageAr' => 'تم إرسال البريد الإلكتروني بنجاح! سنتواصل معك قريباً.'
     ]);
     
@@ -188,17 +216,19 @@ try {
         $e->getMessage()
     ));
     
-    // Determine language
-    $lang = isset($data['lang']) ? $data['lang'] : 'ar';
+    // Determine language (check if $data exists first)
+    $lang = (isset($data) && is_array($data)) ? getLang($data) : 'ar';
     
     // Return error response
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => $lang === 'en' 
-            ? 'Failed to send email. Please try again later.'
-            : 'فشل إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقاً.',
+        'message' => getLocalizedMessage(
+            $lang,
+            'Failed to send email. Please try again later.',
+            'فشل إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقاً.'
+        ),
         'messageAr' => 'فشل إرسال البريد الإلكتروني. يرجى المحاولة مرة أخرى لاحقاً.',
-        'error' => $_ENV['APP_DEBUG'] === 'true' ? $e->getMessage() : 'Internal server error'
+        'error' => (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG'] === 'true') ? $e->getMessage() : 'Internal server error'
     ]);
 }
